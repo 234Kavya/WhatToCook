@@ -1,0 +1,233 @@
+/* Basic styling */
+*{
+  font-family:cursive;
+  margin: 0;
+  padding: 0;
+}
+body {
+    font-family: sans-serif;
+    margin: 2rem;
+    background-color: #f2f2f2; /* Light gray background */
+  }
+  
+  /* Heading with space for logo */
+  h1 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .logo {
+    width: 50px; /* Adjust logo width as needed */
+    height: 50px; /* Adjust logo height as needed */
+    margin-right: 1rem;
+  }
+  
+  /* Form styling */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff; /* White background for select menus */
+  }
+  
+  button {
+    background-color: #0a9c27; /* Purple background */
+    color: white;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Button hover effect */
+  button:hover {
+    background-color:#03320d; /* Darker purple on hover */
+  }
+
+  /* Basic styling */
+body {
+    font-family: sans-serif;
+    margin: 2rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Information sections */
+  .recipe-info {
+    margin-bottom: 1rem;
+  }
+  
+  .recipe-info p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .recipe-info p span:first-child {
+    font-weight: bold;
+  }
+  
+  /* Specific elements */
+  .prep-time,
+  .cook-time,
+  .total-time {
+    color: #f06292; /* Light pink */
+  }
+  
+  .servings {
+    color: #3aa0e6; /* Light blue */
+  }
+  
+  .diet {
+    color: #9ccc65; /* Light green */
+  }
+  
+  .url {
+    font-style: italic;
+  }
+  .url a {
+    color: #477c06; /* Change color to indicate a link */
+    text-decoration: underline; /* Add underline for visual cue */
+  }
+  
+  .url a:hover {
+    color: #0055a5; /* Change color on hover for better feedback */
+  }
+
+
+  .row{
+    align-items: left;
+    text-align: left;
+  }
+
+.rc-content h1{
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white;
+  border:2px transparent black;
+  align-items: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  padding: 10px 10px;
+  font-weight: bold;
+  border-radius: 20% ;
+  
+}
+
+.rc-time{
+  display: flex;
+  justify-content: space-between;
+}
+
+.url{
+  border: 2px solid black;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20%;
+  /* align-items: center;
+  display: flex;
+  text-align: center;
+  justify-content: center; */
+  
+}
+.url_line{
+  align-items: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.content{
+display: flex;
+/* border: 2px solid black; */
+height: min-content;
+width: 100%;
+}
+
+.content img{
+  /* border: 2px solid red; */
+  height: 300px;
+  width: 33%;
+  overflow: hidden;
+  max-height: 320px;
+}
+.nav{ 
+  margin-top: -20px;
+  /* border: 2px solid red; */
+  /* padding: 10px; */
+  /* border-radius: 20%; */
+}
+
+.logo{
+  /* border: black 2px solid; */
+  height: 65px;
+  width:30%;
+  /* margin-top: -10px; */
+}
+
+.logo img{
+  height: 100%;
+  width: 100%;
+}
+header{
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.logo{
+  display:flex;
+  justify-content: space-between;
+  /* border:  2px solid black; */
+}
+
+
+
+.news-slider {
+  width: 100%; /* Adjust width as needed */
+  height: 40px;
+  overflow: hidden; /* Hide overflowing content */
+  position: relative;
+  /* border: 2px solid black; */
+  align-items: right;
+  /* border: 2px solid; */
+  align-items: center;
+  margin-top: 12px;
+}
+
+.news-slider ul {
+  position: absolute;
+  top: 0; /* Start from the top */
+  width: max-content; /* Stretch to full width */
+  animation: newslide 30s linear infinite; 
+  /* animation:  30s infinite alternate; */
+}
+
+.news-slider li {
+  list-style: none;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white;
+  margin-bottom: 5px;
+  font-size: 20px;
+  /* opacity: 0;  */
+  /* transition: opacity 2s ease-in-out; */
+}
+
+@keyframes newslide {
+  0% {
+    transform: translateY(0); /* Start from top */
+  }
+  100% {
+    transform: translateY(-100%); /* Move down the entire height */
+  }
+}

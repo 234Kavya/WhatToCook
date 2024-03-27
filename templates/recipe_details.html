@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="rc-content">
+    <h1>{{ recipe['RecipeName'] }}</h1>
+    <br>
+    <p>Translated Recipe Name: {{ recipe['TranslatedRecipeName'] }}</p>
+    <br>
+    <p>Ingredients: {{ recipe['Ingredients'] }}</p>
+    
+    <!-- <p>Translated Ingredients: {{ recipe['TranslatedIngredients'] }}</p> -->
+    <div class="rc-time">
+        <br>
+    <p>Prep Time (mins): {{ recipe['PrepTimeInMins'] }}</p>
+    <p>Cook Time (mins): {{ recipe['CookTimeInMins'] }}</p>
+    <p>Total Time (mins): {{ recipe['TotalTimeInMins'] }}</p>
+    <p>Servings: {{ recipe['Servings'] }}</p>
+    <p>Diet: {{ recipe['Diet'] }}</p>
+    </div>
+    <p>Instructions: {{ recipe['Instructions'] }}</p>
+    <br>
+    <div class="url_line">
+    <!-- <p>Translated Instructions: {{ recipe['TranslatedInstructions'] }}</p> -->
+    <p class="url">URL: <a href="{{ recipe['URL'] }} ">{{ recipe['URL'] }}</a></p>
+</div>
+    <!-- <p>URL: {{ recipe['URL'] }}</p> -->
+</div>
+</body

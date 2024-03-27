@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggested Recipes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="rc-content">
+    <h1>Suggested Recipes</h1>
+    {% if selected_cuisine %}
+        <p>Cuisine: {{ selected_cuisine }}</p>
+    {% endif %}
+    {% if selected_course %}
+        <p>Course: {{ selected_course }}</p>
+    {% endif %}
+</div>
+    <table>
+        <thead>
+            <tr class="row">
+                <th>Recipe Name</th>
+                <th>Course</th>
+                <th>Prep Time (mins)</th>
+                <th>Cook Time (mins)</th>
+                <th>More Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr class="tablecols">
+                    <td>{{ recipe['RecipeName'] }}</td>
+                    <td>{{ recipe['Course'] }}</td>
+                    <td>{{ recipe['PrepTimeInMins'] }}</td>
+                    <td>{{ recipe['CookTimeInMins'] }}</td>
+                    <td>
+                        <form action="{{ url_for('recipe_details', recipe_id=recipe['RecipeName']) }}" method="POST">
+                            <button type="submit">Explore</button>
+                        </form>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not recipes %}
+        <p>No recipes found for your selection. Please try a different cuisine or course.</p>
+    {% endif %}
+</body>
+</html>
