@@ -15,6 +15,7 @@ def get_unique_courses(selected_cuisine=None):
         return df[df['Cuisine'] == selected_cuisine]['Course'].unique()
     else:
         return df['Course'].unique()  # Return all unique courses if no cuisine selected
+    s
 
 @app.route('/')
 def index():
@@ -47,6 +48,25 @@ def recipe_details(recipe_id):
 
     recipe_details = selected_recipe.to_dict('records')[0]  # Convert to dictionary
     return render_template('recipe_details.html', recipe=recipe_details)
+
+
+# Replace with your actual API credentials
+API_ID = "7aa516a5"
+API_KEY = "dc836a223fb788b11ae390504d9e97ce"
+
+@app.route('/recipefinder')  # This route defines the `recipefinder` page
+def recipefinder():
+  # Your logic for handling the recipe finder page (e.g., retrieving recipe data)
+  return render_template('ReciepeFinder.html')  # Updated filename
+
+@app.route('/search_recipes', methods=['POST'])
+def search_recipes():
+  search_term = request.form['search']
+  # Implement logic to use search_term with API credentials (API_ID, API_KEY) to retrieve recipes
+  # You can use a library like requests for making API calls
+  recipes = []  # Replace with actual recipe data retrieved from API
+  return render_template('ReciepeFinder.html', recipes=recipes)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

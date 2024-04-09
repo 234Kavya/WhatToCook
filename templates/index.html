@@ -48,9 +48,36 @@
         &nbsp;
         &nbsp;
         &nbsp;
-        &nbsp;&nbsp;  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;  &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
-   
+ <div class="header-link">
+      <a href="{{ url_for('recipefinder') }}">Search Recipe by Name</a>
+    </div>
+    </header>  
+
+    <h1>What cuisine and course are you craving today?</h1>
+    <form action="/suggestions" method="POST">
+        <div class="detail_form">
+        <div>
+        <select name="cuisine">
+            <option value="">-- Select Cuisine --</option>
+            {% for cuisine in cuisines %}
+                <option value="{{ cuisine }}">{{ cuisine }}</option>
+            {% endfor %}
+        </select>
+    
+        <select name="course">
+            <option value="">-- Select Course (Optional) --</option>
+            {% for course in courses %}
+                <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div>
+        <button type="submit">Suggest Recipes</button>
+    </div>
+</div>
+    </form>
     <div class="news-slider">
         <ul>
           <li>Need dinner inspiration in a pinch? We've got you covered.</li>
@@ -61,36 +88,14 @@
           <li>Food is love, and we're here to share the love with you!</li>
           <li>Treat yourself to a taste of happiness with our decadent desserts.</li>
           <li>Unleash your inner chef and create magical meals with our easy-to-follow recipes</li>
-          <li>Challenge yourself with a new cuisine every week! Explore our international recipes.</li>
-        
-       
+          <li>Challenge yourself with a new cuisine every week! Explore our international recipes.</li> 
         </ul>
       </div>
-    </header>
-  
-   <br>
-    <h1>What cuisine and course are you craving today?</h1>
-    <form action="/suggestions" method="POST">
-        <select name="cuisine">
-            <option value="">-- Select Cuisine --</option>
-            {% for cuisine in cuisines %}
-                <option value="{{ cuisine }}">{{ cuisine }}</option>
-            {% endfor %}
-        </select>
-        <select name="course">
-            <option value="">-- Select Course (Optional) --</option>
-            {% for course in courses %}
-                <option value="{{ course }}">{{ course }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Suggest Recipes</button>
-    </form>
-    <br>
+      <br>
     <div class="content">
         <img src="/static/Images/Hungry but clueless.png">
         <img src="/static/Images/veg.jpg">
-        <img src="/static/Images/Can't decide We'll dish up the perfect match!.png">
-       
+        <img src="/static/Images/Can't decide We'll dish up the perfect match!.png">  
     </div>
 </body>
 </html>
