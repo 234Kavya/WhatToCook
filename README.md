@@ -3,6 +3,13 @@
  <br>
  <br>
 ### This project provides a user-friendly interface to help people discover new recipes based on their preferences.
+![image](https://github.com/user-attachments/assets/c9ca96e3-9d84-4dc6-84f0-2a65c5a71622)
+
+<br><br>
+![image](https://github.com/user-attachments/assets/2b1471d0-24dd-46eb-b30d-c0ae12026eaf)
+<br><br>
+![image](https://github.com/user-attachments/assets/bffd7a32-0d7a-4e53-8c2f-9bb769e151d2)
+
 
 ## Features:
 #### Suggest recipes based on cuisine and course selection.
