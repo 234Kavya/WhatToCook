@@ -1,16 +1,22 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "wsgi.py",
-        "use": "@vercel/python"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "wsgi.py"
-      }
-    ]
+  "version": 2,
+  "buildCommand": "cp requirements-vercel.txt requirements.txt",
+  "builds": [
+    {
+      "src": "wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "wsgi.py"
+    }
+  ],
+  "functions": {
+    "wsgi.py": {
+      "maxDuration": 30
+    }
   }
+}
   
