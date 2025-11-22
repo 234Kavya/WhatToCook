@@ -15,13 +15,10 @@ def get_unique_courses(selected_cuisine=None):
         return df[df['Cuisine'] == selected_cuisine]['Course'].unique()
     else:
         return df['Course'].unique()  # Return all unique courses if no cuisine selected
-    s
 
 @app.route('/')
 def index():
-    cuisines = get_unique_cuisines()
-    courses = get_unique_courses()  # Initially get all courses
-    return render_template('index.html', cuisines=cuisines, courses=courses)
+    return render_template('index.html')
 
 @app.route('/suggestions', methods=['POST'])
 def suggestions():
@@ -66,6 +63,69 @@ def search_recipes():
   # You can use a library like requests for making API calls
   recipes = []  # Replace with actual recipe data retrieved from API
   return render_template('ReciepeFinder.html', recipes=recipes)
+
+# New routes for the three modes
+@app.route('/pantry-mode')
+def pantry_mode():
+    cuisines = get_unique_cuisines()
+    courses = get_unique_courses()
+    return render_template('pantry_mode.html', cuisines=cuisines, courses=courses)
+
+@app.route('/cook-mode')
+def cook_mode():
+    cuisines = get_unique_cuisines()
+    courses = get_unique_courses()
+    return render_template('cook_mode.html', cuisines=cuisines, courses=courses)
+
+@app.route('/cook-mode-suggestions', methods=['POST'])
+def cook_mode_suggestions():
+    selected_cuisine = request.form.get('cuisine', '')
+    selected_course = request.form.get('course', '')
+    max_time = request.form.get('time', '')
+    mood = request.form.get('mood', '')
+    
+    # Start with all recipes
+    filtered_df = df.copy()
+    
+    # Filter by cuisine
+    if selected_cuisine:
+        filtered_df = filtered_df[filtered_df['Cuisine'] == selected_cuisine]
+    
+    # Filter by course
+    if selected_course:
+        filtered_df = filtered_df[filtered_df['Course'] == selected_course]
+    
+    # Filter by time (TotalTimeInMins)
+    if max_time:
+        max_time_int = int(max_time)
+        filtered_df = filtered_df[filtered_df['TotalTimeInMins'] <= max_time_int]
+    
+    # Filter by mood (map to Diet or Course)
+    if mood:
+        if mood == 'healthy':
+            # Healthy mood: filter for vegetarian/vegan diets
+            filtered_df = filtered_df[filtered_df['Diet'].isin(['Vegetarian', 'Vegan'])]
+        elif mood == 'comfort':
+            # Comfort food: typically main courses or desserts
+            filtered_df = filtered_df[filtered_df['Course'].isin(['Main Course', 'Dessert'])]
+        elif mood == 'quick':
+            # Quick: filter for recipes with less than 30 minutes total time
+            filtered_df = filtered_df[filtered_df['TotalTimeInMins'] <= 30]
+        elif mood == 'indulgent':
+            # Indulgent: desserts or snacks
+            filtered_df = filtered_df[filtered_df['Course'].isin(['Dessert', 'Snack'])]
+    
+    # Select relevant columns for display
+    recipes = filtered_df[['RecipeName', 'TranslatedRecipeName', 'Course', 'PrepTimeInMins', 
+                           'CookTimeInMins', 'TotalTimeInMins', 'Servings', 'Diet', 'Cuisine']].to_dict('records')
+    
+    return render_template('cook_mode_results.html', recipes=recipes, 
+                          cuisine=selected_cuisine, course=selected_course, 
+                          time=max_time, mood=mood)
+
+@app.route('/order-mode')
+def order_mode():
+    return render_template('order_mode.html')
 
 
 

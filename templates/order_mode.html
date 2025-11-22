@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Mode - WhatToEat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="mode-page">
+        <div class="mode-header">
+            <a href="{{ url_for('index') }}" class="back-button">← Back to Home</a>
+            <div class="mode-header-content">
+                <h1>Order Mode</h1>
+                <p class="mode-subtitle">Not in the mood to cook? Get smart food delivery suggestions based on your preferences.</p>
+            </div>
+        </div>
+        
+        <div class="mode-content">
+            <form class="order-form" id="orderForm">
+                <div class="filter-group filter-group-full">
+                    <label class="filter-label">
+                        <span class="filter-icon">🍽</span>
+                        Preferred Cuisine
+                    </label>
+                    <div class="filter-chips">
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="indian">
+                            Indian
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="chinese">
+                            Chinese
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="italian">
+                            Italian
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="mexican">
+                            Mexican
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="thai">
+                            Thai
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="japanese">
+                            Japanese
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="american">
+                            American
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="healthy">
+                            Healthy
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="cuisine" data-value="">
+                            Any
+                        </button>
+                    </div>
+                    <input type="hidden" name="cuisine" id="cuisine" value="">
+                </div>
+                
+                <div class="filters-row">
+                    <div class="filter-group filter-group-half">
+                        <label class="filter-label">
+                            <span class="filter-icon">💰</span>
+                            Budget
+                        </label>
+                        <div class="filter-chips">
+                            <button type="button" class="filter-chip" data-filter="budget" data-value="low">
+                                Low
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="budget" data-value="medium">
+                                Medium
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="budget" data-value="high">
+                                High
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="budget" data-value="premium">
+                                Premium
+                            </button>
+                        </div>
+                        <input type="hidden" name="budget" id="budget" value="">
+                    </div>
+                    
+                    <div class="filter-group filter-group-half">
+                        <label class="filter-label">
+                            <span class="filter-icon">⏱</span>
+                            Max Delivery Time
+                        </label>
+                        <div class="filter-chips">
+                            <button type="button" class="filter-chip" data-filter="delivery_time" data-value="20">
+                                < 20 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="delivery_time" data-value="30">
+                                < 30 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="delivery_time" data-value="45">
+                                < 45 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="delivery_time" data-value="60">
+                                < 60 min
+                            </button>
+                        </div>
+                        <input type="hidden" name="delivery_time" id="delivery_time" value="">
+                    </div>
+                </div>
+                
+                <div class="filters-row">
+                    <div class="filter-group filter-group-half">
+                        <label class="filter-label">
+                            <span class="filter-icon">🎁</span>
+                            Deals
+                        </label>
+                        <div class="filter-chips">
+                            <button type="button" class="filter-chip" data-filter="deals" data-value="yes">
+                                Yes
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="deals" data-value="no">
+                                No
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="deals" data-value="">
+                                Doesn't matter
+                            </button>
+                        </div>
+                        <input type="hidden" name="deals" id="deals" value="">
+                    </div>
+                    
+                </div>
+                
+                <div class="order-actions">
+                    <button type="button" class="order-button swiggy-btn" id="swiggyBtn">
+                        <span class="order-icon">🍔</span>
+                        Order on Swiggy
+                    </button>
+                    <button type="button" class="order-button zomato-btn" id="zomatoBtn">
+                        <span class="order-icon">🍕</span>
+                        Order on Zomato
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Handle filter chip clicks
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                const filterValue = this.getAttribute('data-value');
+                
+                // Toggle selection
+                const isSelected = this.classList.contains('selected');
+                
+                // For single-select filters, deselect others in the same group
+                document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]`).forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Toggle current chip
+                if (isSelected) {
+                    this.classList.remove('selected');
+                    document.getElementById(filterType).value = '';
+                } else {
+                    this.classList.add('selected');
+                    document.getElementById(filterType).value = filterValue;
+                }
+            });
+        });
+        
+        // Handle quick suggestion buttons
+        document.querySelectorAll('.quick-suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const suggestion = this.getAttribute('data-suggestion');
+                
+                // Reset all filters
+                document.querySelectorAll('.filter-chip').forEach(chip => {
+                    chip.classList.remove('selected');
+                });
+                document.querySelectorAll('input[type="hidden"]').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Apply suggestion filters
+                switch(suggestion) {
+                    case 'fastest':
+                        document.querySelector('.filter-chip[data-filter="delivery_time"][data-value="20"]')?.classList.add('selected');
+                        document.getElementById('delivery_time').value = '20';
+                        break;
+                    case 'budget':
+                        document.querySelector('.filter-chip[data-filter="budget"][data-value="low"]')?.classList.add('selected');
+                        document.getElementById('budget').value = 'low';
+                        break;
+                    case 'rated':
+                        // Best rated - no specific filter, just show alert
+                        break;
+                    case 'offers':
+                        document.querySelector('.filter-chip[data-filter="deals"][data-value="yes"]')?.classList.add('selected');
+                        document.getElementById('deals').value = 'yes';
+                        break;
+                }
+            });
+        });
+        
+        function getSelectedFilters() {
+            return {
+                cuisine: document.getElementById('cuisine').value || '',
+                budget: document.getElementById('budget').value || '',
+                delivery_time: document.getElementById('delivery_time').value || '',
+                deals: document.getElementById('deals').value || ''
+            };
+        }
+        
+        function buildSwiggyUrl(filters) {
+            // Try app deep link first, fallback to web
+            let appUrl = 'swiggy://search?';
+            let webUrl = 'https://www.swiggy.com/search?';
+            
+            const params = [];
+            if (filters.cuisine) {
+                params.push(`query=${encodeURIComponent(filters.cuisine)}`);
+            }
+            if (filters.delivery_time) {
+                params.push(`delivery_time=${filters.delivery_time}`);
+            }
+            if (filters.deals === 'yes') {
+                params.push('offers=true');
+            }
+            
+            const queryString = params.join('&');
+            appUrl += queryString;
+            webUrl += queryString;
+            
+            return { appUrl, webUrl };
+        }
+        
+        function buildZomatoUrl(filters) {
+            // Try app deep link first, fallback to web
+            let appUrl = 'zomato://search?';
+            let webUrl = 'https://www.zomato.com/search?';
+            
+            const params = [];
+            if (filters.cuisine) {
+                params.push(`q=${encodeURIComponent(filters.cuisine)}`);
+            }
+            if (filters.delivery_time) {
+                params.push(`delivery_time=${filters.delivery_time}`);
+            }
+            if (filters.deals === 'yes') {
+                params.push('offers=true');
+            }
+            
+            const queryString = params.join('&');
+            appUrl += queryString;
+            webUrl += queryString;
+            
+            return { appUrl, webUrl };
+        }
+        
+        function redirectToSwiggy() {
+            const filters = getSelectedFilters();
+            const { appUrl, webUrl } = buildSwiggyUrl(filters);
+            
+            const filterText = [];
+            if (filters.cuisine) filterText.push(`Cuisine: ${filters.cuisine}`);
+            if (filters.budget) filterText.push(`Budget: ${filters.budget}`);
+            if (filters.delivery_time) filterText.push(`Delivery: < ${filters.delivery_time} min`);
+            if (filters.deals === 'yes') filterText.push('Deals: Yes');
+            
+            const message = filterText.length > 0 
+                ? 'Redirecting to Swiggy app with filters:\n' + filterText.join('\n') + '\n\nIf the app doesn\'t open, you\'ll be redirected to the website.'
+                : 'Redirecting to Swiggy app...\n\nIf the app doesn\'t open, you\'ll be redirected to the website.';
+            
+            if (confirm(message)) {
+                // Try app deep link
+                window.location.href = appUrl;
+                
+                // Fallback to web after a short delay
+                setTimeout(() => {
+                    window.open(webUrl, '_blank');
+                }, 500);
+            }
+        }
+        
+        function redirectToZomato() {
+            const filters = getSelectedFilters();
+            const { appUrl, webUrl } = buildZomatoUrl(filters);
+            
+            const filterText = [];
+            if (filters.cuisine) filterText.push(`Cuisine: ${filters.cuisine}`);
+            if (filters.budget) filterText.push(`Budget: ${filters.budget}`);
+            if (filters.delivery_time) filterText.push(`Delivery: < ${filters.delivery_time} min`);
+            if (filters.deals === 'yes') filterText.push('Deals: Yes');
+            
+            const message = filterText.length > 0 
+                ? 'Redirecting to Zomato app with filters:\n' + filterText.join('\n') + '\n\nIf the app doesn\'t open, you\'ll be redirected to the website.'
+                : 'Redirecting to Zomato app...\n\nIf the app doesn\'t open, you\'ll be redirected to the website.';
+            
+            if (confirm(message)) {
+                // Try app deep link
+                window.location.href = appUrl;
+                
+                // Fallback to web after a short delay
+                setTimeout(() => {
+                    window.open(webUrl, '_blank');
+                }, 500);
+            }
+        }
+        
+        // Attach event listeners
+        document.getElementById('swiggyBtn').addEventListener('click', redirectToSwiggy);
+        document.getElementById('zomatoBtn').addEventListener('click', redirectToZomato);
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cook Mode Results - WhatToEat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="mode-page">
+        <div class="mode-header">
+            <a href="{{ url_for('cook_mode') }}" class="back-button">← Back to Cook Mode</a>
+            <h1>Recipe Suggestions</h1>
+            {% if cuisine or course or time or mood %}
+            <p class="mode-subtitle">
+                {% if cuisine %}Cuisine: {{ cuisine }} | {% endif %}
+                {% if course %}Course: {{ course }} | {% endif %}
+                {% if time %}Max Time: {{ time }} min | {% endif %}
+                {% if mood %}Mood: {{ mood.title() }}{% endif %}
+            </p>
+            {% endif %}
+        </div>
+        
+        <div class="mode-content">
+            {% if recipes %}
+            <div class="pantry-results">
+                {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <div class="recipe-content">
+                        <h3>{{ recipe['RecipeName'] }}</h3>
+                        {% if recipe['TranslatedRecipeName'] %}
+                        <p class="recipe-translated">{{ recipe['TranslatedRecipeName'] }}</p>
+                        {% endif %}
+                        <div class="recipe-info">
+                            <span class="recipe-time">⏱ {{ recipe['TotalTimeInMins'] }} min</span>
+                            <span class="recipe-servings">👥 {{ recipe['Servings'] }} servings</span>
+                            {% if recipe['Diet'] %}
+                            <span class="recipe-diet">🥗 {{ recipe['Diet'] }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="recipe-details">
+                            <p><strong>Cuisine:</strong> {{ recipe['Cuisine'] }}</p>
+                            <p><strong>Course:</strong> {{ recipe['Course'] }}</p>
+                            <p><strong>Prep Time:</strong> {{ recipe['PrepTimeInMins'] }} min | <strong>Cook Time:</strong> {{ recipe['CookTimeInMins'] }} min</p>
+                        </div>
+                        <div class="recipe-actions">
+                            <form action="{{ url_for('recipe_details', recipe_id=recipe['RecipeName']) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="recipe-link-btn">View Full Recipe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="error-message">
+                <p>No recipes found matching your criteria. Please try adjusting your filters!</p>
+                <a href="{{ url_for('cook_mode') }}" class="back-button" style="display: inline-block; margin-top: 1rem;">Try Different Filters</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+

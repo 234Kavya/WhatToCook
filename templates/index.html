@@ -3,100 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Suggester</title>
-    
+    <title>WhatToEat - Smart Food Decision Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-   <header class="nav">
-    <div class ="logo">
-        <img src="/static/Images/png/logo-no-background.png">
-    </div>
-    <div>
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;&nbsp;  &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </div>
- <div class="header-link">
-      <a href="{{ url_for('recipefinder') }}">Search Recipe by Name</a>
-    </div>
-    </header>  
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="brand-logo">
+                <div class="logo-graphic">
+                    <img src="{{ url_for('static', filename='Images/png/w2e.png') }}" alt="WhatToEat Logo" class="logo-image">
+                </div>
+            </div>
+            <h1 class="hero-headline">
+                <span class="headline-line">Stop wondering.</span>
+                <span class="headline-line">Start eating.</span>
+            </h1>
+            <p class="hero-description">
+                The smart food decision assistant that tells you what to eat whether cooking or orderingin seconds.
+            </p>
+            <button class="cta-button" id="getStartedBtn">Get Started</button>
+        </div>
+    </section>
 
-    <h1>What cuisine and course are you craving today?</h1>
-    <form action="/suggestions" method="POST">
-        <div class="detail_form">
-        <div>
-        <select name="cuisine">
-            <option value="">-- Select Cuisine --</option>
-            {% for cuisine in cuisines %}
-                <option value="{{ cuisine }}">{{ cuisine }}</option>
-            {% endfor %}
-        </select>
-    
-        <select name="course">
-            <option value="">-- Select Course (Optional) --</option>
-            {% for course in courses %}
-                <option value="{{ course }}">{{ course }}</option>
-            {% endfor %}
-        </select>
-        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <div>
-        <button type="submit">Suggest Recipes</button>
-    </div>
-</div>
-    </form>
-    <div class="news-slider">
-        <ul>
-          <li>Need dinner inspiration in a pinch? We've got you covered.</li>
-          <li>Never run out of meal ideas again! Explore our vast recipe collection.</li>
-          <li>Takeout getting boring? Spice up your life with our recipes!</li>
-          <li>Feeling stressed? Let food be your comfort with our cozy recipes.</li>
-          <li>Celebrate life's little victories with a delicious homemade meal.</li>
-          <li>Food is love, and we're here to share the love with you!</li>
-          <li>Treat yourself to a taste of happiness with our decadent desserts.</li>
-          <li>Unleash your inner chef and create magical meals with our easy-to-follow recipes</li>
-          <li>Challenge yourself with a new cuisine every week! Explore our international recipes.</li> 
-        </ul>
-      </div>
-      <br>
-    <div class="content">
-        <img src="/static/Images/Hungry but clueless.png">
-        <img src="/static/Images/veg.jpg">
-        <img src="/static/Images/Can't decide We'll dish up the perfect match!.png">  
-    </div>
+    <!-- Three Modes Section (Hidden initially) -->
+    <section class="modes-section" id="modesSection" style="display: none;">
+        <div class="modes-container">
+            <h2 class="modes-heading">Three ways to decide</h2>
+            <p class="modes-subtitle">
+                Whether you're cooking with leftovers or ordering your favorite meal, we've got you covered.
+            </p>
+            <div class="modes-grid">
+                <!-- Pantry Mode Card -->
+                <div class="mode-card pantry-card" onclick="window.location.href='{{ url_for('pantry_mode') }}'">
+                    <div class="mode-icon pantry-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"></path>
+                            <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"></path>
+                            <path d="m2.1 21.8 6.4-6.3"></path>
+                            <path d="m19 5-7 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">Pantry Mode</h3>
+                    <p class="mode-description">
+                        Got random ingredients? We'll find you the perfect recipe using what's in your kitchen right now.
+                    </p>
+                </div>
+
+                <!-- Cook Mode Card -->
+                <div class="mode-card cook-card" onclick="window.location.href='{{ url_for('cook_mode') }}'">
+                    <div class="mode-icon cook-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path>
+                            <path d="M6 17h12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">Cook Mode</h3>
+                    <p class="mode-description">
+                        Time to cook something amazing! Filter by time, skill level, and mood for personalized recipe suggestions.
+                    </p>
+                </div>
+
+                <!-- Order Mode Card -->
+                <div class="mode-card order-card" onclick="window.location.href='{{ url_for('order_mode') }}'">
+                    <div class="mode-icon order-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                            <path d="M3 6h18"></path>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">Order Mode</h3>
+                    <p class="mode-description">
+                        Not in the mood to cook? Get smart food delivery suggestions based on your cravings and budget.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Handle Get Started button click
+        document.getElementById('getStartedBtn').addEventListener('click', function() {
+            const heroSection = document.getElementById('heroSection');
+            const modesSection = document.getElementById('modesSection');
+            
+            // Smooth scroll to modes section
+            heroSection.style.opacity = '0';
+            heroSection.style.transform = 'translateY(-20px)';
+            
+            setTimeout(() => {
+                heroSection.style.display = 'none';
+                modesSection.style.display = 'block';
+                modesSection.style.opacity = '0';
+                modesSection.style.transform = 'translateY(20px)';
+                
+                // Trigger animation
+                setTimeout(() => {
+                    modesSection.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    modesSection.style.opacity = '1';
+                    modesSection.style.transform = 'translateY(0)';
+                }, 50);
+            }, 300);
+        });
+    </script>
 </body>
 </html>

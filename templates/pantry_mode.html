@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Mode - WhatToEat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="mode-page">
+        <div class="mode-header">
+            <a href="{{ url_for('index') }}" class="back-button">← Back to Home</a>
+            <div class="mode-header-content">
+                <h1>Pantry Mode</h1>
+                <p class="mode-subtitle">Got random ingredients? We'll find you the perfect recipe using what's in your pantry.</p>
+            </div>
+        </div>
+        
+        <div class="mode-content">
+            <button type="button" class="clear-all-btn-top" id="clearAllBtn">Clear all</button>
+            <form class="pantry-form" id="pantryForm">
+                <div class="form-group">
+                    <label for="ingredients">Ingredients</label>
+                    <div class="ingredient-input-wrapper">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                        <input type="text" id="ingredients" name="ingredients" placeholder="What's in your kitchen today? Tap or type to add them" required>
+                    </div>
+                                    <!-- Suggestions Section -->
+                <div class="suggestions-section">
+                    <h4 class="suggestions-title">Suggestions</h4>
+                        <div class="ingredient-chips">
+                            <button type="button" class="ingredient-chip" data-ingredient="onion">
+                                <span class="chip-emoji">🧅</span>
+                                <span class="chip-text">onion</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="tomato">
+                                <span class="chip-emoji">🍅</span>
+                                <span class="chip-text">tomato</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="garlic">
+                                <span class="chip-emoji">🧄</span>
+                                <span class="chip-text">garlic</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="rice">
+                                <span class="chip-emoji">🍚</span>
+                                <span class="chip-text">rice</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="egg">
+                                <span class="chip-emoji">🥚</span>
+                                <span class="chip-text">egg</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="bread">
+                                <span class="chip-emoji">🍞</span>
+                                <span class="chip-text">bread</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="potato">
+                                <span class="chip-emoji">🥔</span>
+                                <span class="chip-text">potato</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="chicken">
+                                <span class="chip-emoji">🍗</span>
+                                <span class="chip-text">chicken</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="carrot">
+                                <span class="chip-emoji">🥕</span>
+                                <span class="chip-text">carrot</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="spinach">
+                                <span class="chip-emoji">🥬</span>
+                                <span class="chip-text">spinach</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="mushroom">
+                                <span class="chip-emoji">🍄</span>
+                                <span class="chip-text">mushroom</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="apple">
+                                <span class="chip-emoji">🍎</span>
+                                <span class="chip-text">apple</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="banana">
+                                <span class="chip-emoji">🍌</span>
+                                <span class="chip-text">banana</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="lemon">
+                                <span class="chip-emoji">🍋</span>
+                                <span class="chip-text">lemon</span>
+                            </button>
+                            <button type="button" class="ingredient-chip" data-ingredient="cheese">
+                                <span class="chip-emoji">🧀</span>
+                                <span class="chip-text">cheese</span>
+                            </button>
+                        </div>
+                </div>
+                </div>
+                
+
+                
+                <!-- Optional Filters Section -->
+                <div class="optional-filters-section">
+                    <h4 class="filters-title">Optional Filters</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cuisine">Preferred Cuisine</label>
+                            <select name="cuisine" id="cuisine">
+                                <option value="">Select Cuisine</option>
+                                {% for cuisine in cuisines %}
+                                    <option value="{{ cuisine }}">{{ cuisine }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" ">
+                            <label for="course">Course Type</label>
+                            <select name="course" id="course">
+                                <option value="">Select Course</option>
+                                {% for course in courses %}
+                                    <option value="{{ course }}">{{ course }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-button">Find Recipes</button>
+            </form>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div id="loading" class="loading-indicator" style="display: none;">
+            <p>Searching for recipes...</p>
+        </div>
+        
+        <!-- Results container - Full width -->
+        <div class="results-container">
+            <div id="results" class="pantry-results"></div>
+        </div>
+    </div>
+    
+    <script>
+        const pantryForm = document.getElementById('pantryForm');
+        const ingredientsInput = document.getElementById('ingredients');
+        const resultsList = document.getElementById('results');
+        const loadingIndicator = document.getElementById('loading');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        let selectedIngredients = [];
+        
+        // Handle ingredient chip clicks (toggle selection)
+        document.querySelectorAll('.ingredient-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const ingredient = this.getAttribute('data-ingredient');
+                toggleIngredient(ingredient);
+            });
+        });
+        
+        // Toggle ingredient selection
+        function toggleIngredient(ingredient) {
+            const index = selectedIngredients.indexOf(ingredient);
+            if (index > -1) {
+                // Already selected, remove it
+                selectedIngredients.splice(index, 1);
+            } else {
+                // Not selected, add it
+                selectedIngredients.push(ingredient);
+            }
+            updateIngredientsInput();
+            updateSelectedChips();
+            updateChipStates();
+        }
+        
+        // Add ingredient to selected list (for direct input)
+        function addIngredient(ingredient) {
+            if (!selectedIngredients.includes(ingredient)) {
+                selectedIngredients.push(ingredient);
+                updateIngredientsInput();
+                updateSelectedChips();
+                updateChipStates();
+            }
+        }
+        
+        // Update chip visual states
+        function updateChipStates() {
+            document.querySelectorAll('.ingredient-chip').forEach(chip => {
+                const ingredient = chip.getAttribute('data-ingredient');
+                if (selectedIngredients.includes(ingredient)) {
+                    chip.classList.add('selected');
+                } else {
+                    chip.classList.remove('selected');
+                }
+            });
+        }
+        
+        // Remove ingredient from selected list
+        function removeIngredient(ingredient) {
+            selectedIngredients = selectedIngredients.filter(item => item !== ingredient);
+            updateIngredientsInput();
+            updateSelectedChips();
+            updateChipStates();
+        }
+        
+        // Update the input field with selected ingredients
+        function updateIngredientsInput() {
+            ingredientsInput.value = selectedIngredients.join(', ');
+        }
+        
+        // Update selected chips display (only visual state, no separate badges)
+        function updateSelectedChips() {
+            // Just update the visual state of suggestion chips
+            updateChipStates();
+        }
+        
+        // Clear all ingredients
+        clearAllBtn.addEventListener('click', function() {
+            selectedIngredients = [];
+            updateIngredientsInput();
+            updateSelectedChips();
+            updateChipStates();
+            document.getElementById('cuisine').value = '';
+            document.getElementById('course').value = '';
+        });
+        
+        // Handle input field changes (when user types)
+        ingredientsInput.addEventListener('input', function() {
+            const value = this.value.trim();
+            if (value) {
+                const ingredients = value.split(',').map(item => item.trim()).filter(item => item);
+                selectedIngredients = [...new Set(ingredients)]; // Remove duplicates
+                updateSelectedChips();
+                updateChipStates();
+            } else {
+                selectedIngredients = [];
+                updateSelectedChips();
+                updateChipStates();
+            }
+        });
+        
+        // Handle form submission
+        pantryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            searchRecipes();
+        });
+        
+        async function searchRecipes() {
+            const ingredients = ingredientsInput.value.trim();
+            const cuisine = document.getElementById('cuisine').value;
+            
+            if (!ingredients) {
+                alert('Please enter at least one ingredient');
+                return;
+            }
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            resultsList.innerHTML = '';
+            
+            try {
+                // Build search query with ingredients and optional cuisine
+                let searchQuery = ingredients;
+                if (cuisine) {
+                    searchQuery += ` ${cuisine}`;
+                }
+                
+                // Make API call to Edamam Recipe Search API (free tier)
+                const apiUrl = `https://api.edamam.com/api/recipes/v2?type=public&q=${encodeURIComponent(searchQuery)}&app_id=7aa516a5&app_key=dc836a223fb788b11ae390504d9e97ce&from=0&to=12`;
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch recipes');
+                }
+                
+                const data = await response.json();
+                // Handle Edamam API v2 response format
+                if (data.hits && data.hits.length > 0) {
+                    displayRecipes(data.hits);
+                } else {
+                    displayRecipes([]);
+                }
+            } catch (error) {
+                console.error('Error searching recipes:', error);
+                resultsList.innerHTML = '<div class="error-message">Sorry, we couldn\'t find any recipes. Please try again with different ingredients.</div>';
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+        
+        function displayRecipes(recipes) {
+            if (!recipes || recipes.length === 0) {
+                resultsList.innerHTML = '<div class="error-message">No recipes found. Try different ingredients!</div>';
+                return;
+            }
+            
+            let html = '';
+            recipes.forEach((recipe) => {
+                html += `
+                    <div class="recipe-card">
+                        <img src="${recipe.recipe.image}" alt="${recipe.recipe.label}" onerror="this.src='https://via.placeholder.com/300x200?text=Recipe+Image'">
+                        <div class="recipe-content">
+                            <h3>${recipe.recipe.label}</h3>
+                            <div class="recipe-info">
+                                <span class="recipe-time">⏱ ${recipe.recipe.totalTime || 'N/A'} min</span>
+                                <span class="recipe-servings">👥 ${recipe.recipe.yield || 'N/A'} servings</span>
+                                ${recipe.recipe.calories ? `<span class="recipe-calories">🔥 ${Math.round(recipe.recipe.calories)} cal</span>` : ''}
+                            </div>
+                            <div class="recipe-ingredients">
+                                <h4>Ingredients:</h4>
+                                <ul>
+                                    ${recipe.recipe.ingredientLines.slice(0, 6).map(ingredient => `<li>${ingredient}</li>`).join('')}
+                                    ${recipe.recipe.ingredientLines.length > 6 ? '<li><em>...and more</em></li>' : ''}
+                                </ul>
+                            </div>
+                            <div class="recipe-actions">
+                                <a href="${recipe.recipe.url}" target="_blank" class="recipe-link">View Full Recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            resultsList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+

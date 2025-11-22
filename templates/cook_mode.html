@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cook Mode - WhatToEat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="mode-page">
+        <div class="mode-header">
+            <a href="{{ url_for('index') }}" class="back-button">← Back to Home</a>
+            <div class="mode-header-content">
+                <h1>Cook Mode</h1>
+                <p class="mode-subtitle">Time to cook something amazing! Filter by time, skill level, and mood for the perfect recipe.</p>
+            </div>
+        </div>
+        
+        <div class="mode-content">
+            <form class="cook-form" id="cookForm">
+                <div class="filter-row">
+                    <div class="filter-group filter-group-half">
+                        <label class="filter-label">
+                            <span class="filter-icon">⏱</span>
+                            Available Time
+                        </label>
+                        <div class="filter-chips">
+                            <button type="button" class="filter-chip" data-filter="time" data-value="10">
+                                < 10 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="time" data-value="20">
+                                10-20 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="time" data-value="30">
+                                20-30 min
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="time" data-value="60">
+                                30-60 min
+                            </button>
+                        </div>
+                        <input type="hidden" name="time" id="time" value="">
+                    </div>
+                    
+                    <div class="filter-group filter-group-half">
+                        <label class="filter-label">
+                            <span class="filter-icon">👨‍🍳</span>
+                            Skill Level
+                        </label>
+                        <div class="filter-chips">
+                            <button type="button" class="filter-chip" data-filter="skill" data-value="beginner">
+                                Beginner
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="skill" data-value="easy">
+                                Easy
+                            </button>
+                            <button type="button" class="filter-chip" data-filter="skill" data-value="intermediate">
+                                Intermediate
+                            </button>
+                        </div>
+                        <input type="hidden" name="skill" id="skill" value="">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span class="filter-icon">🍽</span>
+                        Cuisine
+                    </label>
+                    <div class="filter-chips" id="cuisine-chips">
+                        {% for cuisine in cuisines %}
+                        <button type="button" class="filter-chip {% if loop.index > 8 %}filter-chip-hidden{% endif %}" data-filter="cuisine" data-value="{{ cuisine }}">
+                            {{ cuisine }}
+                        </button>
+                        {% endfor %}
+                        {% if cuisines|length > 8 %}
+                        <button type="button" class="filter-chip filter-chip-more" data-filter="cuisine" data-toggle="cuisine">
+                            More...
+                        </button>
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="cuisine" id="cuisine" value="">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span class="filter-icon">🌈</span>
+                        Course Type
+                    </label>
+                    <div class="filter-chips" id="course-chips">
+                        {% for course in courses %}
+                        <button type="button" class="filter-chip {% if loop.index > 8 %}filter-chip-hidden{% endif %}" data-filter="course" data-value="{{ course }}">
+                            {{ course }}
+                        </button>
+                        {% endfor %}
+                        {% if courses|length > 8 %}
+                        <button type="button" class="filter-chip filter-chip-more" data-filter="course" data-toggle="course">
+                            More...
+                        </button>
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="course" id="course" value="">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <span class="filter-icon">😊</span>
+                        Your Mood
+                    </label>
+                    <div class="filter-chips">
+                        <button type="button" class="filter-chip" data-filter="mood" data-value="comfort">
+                            <span class="chip-emoji">😌</span>
+                            Comfort
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="mood" data-value="healthy">
+                            <span class="chip-emoji">🥗</span>
+                            Fresh
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="mood" data-value="quick">
+                            <span class="chip-emoji">⚡</span>
+                            Quick
+                        </button>
+                        <button type="button" class="filter-chip" data-filter="mood" data-value="indulgent">
+                            <span class="chip-emoji">😋</span>
+                            Indulgent
+                        </button>
+                    </div>
+                    <input type="hidden" name="mood" id="mood" value="">
+                </div>
+                
+                <button type="submit" class="submit-button">Find Recipes</button>
+            </form>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div id="loading" class="loading-indicator" style="display: none;">
+            <p>Searching for recipes...</p>
+        </div>
+        
+        <!-- Results container - Full width -->
+        <div class="results-container">
+            <div id="results" class="cook-results"></div>
+        </div>
+    </div>
+    
+    <script>
+        const cookForm = document.getElementById('cookForm');
+        const resultsList = document.getElementById('results');
+        const loadingIndicator = document.getElementById('loading');
+        
+        // Handle "More..." button clicks
+        document.querySelectorAll('.filter-chip-more').forEach(moreBtn => {
+            moreBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const filterType = this.getAttribute('data-toggle');
+                const chipsContainer = document.getElementById(`${filterType}-chips`);
+                // Get all chips except the "More..." button itself
+                const allChips = Array.from(chipsContainer.querySelectorAll('.filter-chip:not(.filter-chip-more)'));
+                // The first 8 are always visible, the rest are toggleable
+                const extraChips = allChips.slice(8);
+                const isExpanded = this.textContent.trim() === 'Less...';
+                
+                if (isExpanded) {
+                    // Collapse - hide additional options
+                    extraChips.forEach(chip => {
+                        chip.classList.add('filter-chip-hidden');
+                    });
+                    this.textContent = 'More...';
+                } else {
+                    // Expand - show additional options
+                    extraChips.forEach(chip => {
+                        chip.classList.remove('filter-chip-hidden');
+                    });
+                    this.textContent = 'Less...';
+                }
+            });
+        });
+        
+        // Handle filter chip clicks
+        document.querySelectorAll('.filter-chip:not(.filter-chip-more)').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                const filterValue = this.getAttribute('data-value');
+                
+                // Toggle selection
+                const isSelected = this.classList.contains('selected');
+                
+                // For single-select filters, deselect others in the same group
+                document.querySelectorAll(`.filter-chip[data-filter="${filterType}"]:not(.filter-chip-more)`).forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Toggle current chip
+                if (isSelected) {
+                    this.classList.remove('selected');
+                    document.getElementById(filterType).value = '';
+                } else {
+                    this.classList.add('selected');
+                    document.getElementById(filterType).value = filterValue;
+                }
+            });
+        });
+        
+        cookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(cookForm);
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            resultsList.innerHTML = '';
+            
+            try {
+                const response = await fetch('{{ url_for("cook_mode_suggestions") }}', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch recipes');
+                }
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const recipesContainer = doc.querySelector('.pantry-results');
+                
+                if (recipesContainer && recipesContainer.innerHTML.trim()) {
+                    resultsList.innerHTML = recipesContainer.innerHTML;
+                } else {
+                    resultsList.innerHTML = '<div class="error-message">No recipes found. Try adjusting your filters!</div>';
+                }
+            } catch (error) {
+                console.error('Error searching recipes:', error);
+                resultsList.innerHTML = '<div class="error-message">Sorry, we couldn\'t find any recipes. Please try again.</div>';
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
