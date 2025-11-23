@@ -1,4 +1,4 @@
-WhatToEat — Smart Food Decision Engine
+<img width="958" height="470" alt="image" src="https://github.com/user-attachments/assets/124e3f18-4283-4d9e-b640-592f9d22d8f8" />WhatToEat — Smart Food Decision Engine
 
 
 🚀 Overview
@@ -11,11 +11,14 @@ It does this through three intelligent modes:
 2. Cook Mode — Suggest recipes based on time, cuisine, course, and mood 
 3. Order Mode — Suggest delivery options based on cuisine, budget, and delivery time
 
-Live Demo: [Live Prototype](https://what-to-eatt-tau.vercel.app/)
-Case Study: [Case Study](https://www.notion.so/WhatToEat-A-Decision-Engine-for-Busy-Indians-Who-Struggle-With-Daily-Food-Choices-2b497566aa8b80409218e4906482484a?source=copy_link)
+[Live Demo](https://what-to-eatt-tau.vercel.app/)
+
+[Case Study](https://www.notion.so/WhatToEat-A-Decision-Engine-for-Busy-Indians-Who-Struggle-With-Daily-Food-Choices-2b497566aa8b80409218e4906482484a?source=copy_link)
 
 🧠 Why This Project?
 Food decision fatigue is real — especially for students & working professionals.
 This project reduces cognitive load by shifting from searching to smart suggestions.
+
+<img width="958" height="470" alt="image" src="https://github.com/user-attachments/assets/d47425fe-316e-4005-bf3e-0c0baa88c253" />
 
 
