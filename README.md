@@ -12,15 +12,13 @@ It does this through three intelligent modes:
 
 [Case Study](https://www.notion.so/WhatToEat-A-Decision-Engine-for-Busy-Indians-Who-Struggle-With-Daily-Food-Choices-2b497566aa8b80409218e4906482484a?source=copy_link)
 
-<img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/9a0837da-1a8c-48bb-939f-ff4d453bc14c" />
-<img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/944ea533-1dc5-4914-9c5e-95fac457dab6" />
-
-
-
 🧠 Why This Project?
 Food decision fatigue is real — especially for students & working professionals.
 This project reduces cognitive load by shifting from searching to smart suggestions.
 
 <img width="958" height="470" alt="image" src="https://github.com/user-attachments/assets/d47425fe-316e-4005-bf3e-0c0baa88c253" />
+<img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/9dabc122-0029-49db-9ce2-d118449252e8" />
+
+
 
 
