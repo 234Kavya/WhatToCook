@@ -1,6 +1,3 @@
-<img width="958" height="470" alt="image" src="https://github.com/user-attachments/assets/124e3f18-4283-4d9e-b640-592f9d22d8f8" />WhatToEat — Smart Food Decision Engine
-
-
 🚀 Overview
 WhatToEat helps users answer the most stressful everyday question:
 👉 “What should I eat today?”
@@ -14,6 +11,8 @@ It does this through three intelligent modes:
 [Live Demo](https://what-to-eatt-tau.vercel.app/)
 
 [Case Study](https://www.notion.so/WhatToEat-A-Decision-Engine-for-Busy-Indians-Who-Struggle-With-Daily-Food-Choices-2b497566aa8b80409218e4906482484a?source=copy_link)
+<img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/9a0837da-1a8c-48bb-939f-ff4d453bc14c" />
+
 
 🧠 Why This Project?
 Food decision fatigue is real — especially for students & working professionals.
