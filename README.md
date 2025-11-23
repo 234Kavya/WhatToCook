@@ -11,7 +11,10 @@ It does this through three intelligent modes:
 [Live Demo](https://what-to-eatt-tau.vercel.app/)
 
 [Case Study](https://www.notion.so/WhatToEat-A-Decision-Engine-for-Busy-Indians-Who-Struggle-With-Daily-Food-Choices-2b497566aa8b80409218e4906482484a?source=copy_link)
+
 <img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/9a0837da-1a8c-48bb-939f-ff4d453bc14c" />
+<img width="960" height="435" alt="image" src="https://github.com/user-attachments/assets/944ea533-1dc5-4914-9c5e-95fac457dab6" />
+
 
 
 🧠 Why This Project?
